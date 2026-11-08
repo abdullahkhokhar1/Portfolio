@@ -513,3 +513,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .show-m{display:flex}
   .zoomlink{align-items:center;justify-content:center;gap:6px;margin:12px auto 0;color:var(--link,var(--brand));font-weight:600;text-decoration:none}
 }
+
+/* phone zoom: nothing may be wider or taller than the screen */
+html{overflow:hidden;overscroll-behavior:none}
+.app{width:100%;max-width:100vw;overflow:hidden}
+.tip{top:0;left:0}
+@media (max-width:719px){
+  .titlebar{grid-template-columns:auto minmax(0,1fr) auto}
+  .searchwrap{min-width:0;width:100%;box-sizing:border-box}
+  .search{min-width:0}
+  .search input{width:100%}
+}

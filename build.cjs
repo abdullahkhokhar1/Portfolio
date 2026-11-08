@@ -15,7 +15,7 @@ ${r('app.js')}
 </script>`;
 fs.writeFileSync(__dirname+'/artifact.html',head+'\n'+body);
 fs.writeFileSync(__dirname+'/index.html',`<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
 ${head}
 </head><body>
 ${body}
