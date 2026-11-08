@@ -485,3 +485,31 @@ img.poster{display:block;width:100%;max-width:720px;height:auto;margin:0 auto;bo
 .tlabel{margin:12px 0 6px;font:600 12px/16px var(--font);color:var(--fg-3);text-transform:uppercase;letter-spacing:.04em}
 .tlabel:first-of-type{margin-top:4px}
 .post .tags + .tlabel,.tags + .tlabel{margin-top:18px}
+
+/* mobile: a section opens on its list; nothing is pre-selected until the visitor picks an item */
+@media (max-width:719px){ .work:not(.detail) .litem[aria-selected="true"]{background:none;box-shadow:none} }
+
+/* mobile polish */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (max-width:719px){
+  /* 16px fields stop phones from zooming the page when a field is tapped */
+  input,textarea,select{font-size:16px!important}
+  /* wide tables become stacked rows instead of scrolling sideways */
+  .tablewrap{overflow-x:visible}
+  table.dt:not(.certs),table.dt:not(.certs) tbody,table.dt:not(.certs) tr,table.dt:not(.certs) td{display:block;width:auto}
+  table.dt:not(.certs) thead{display:none}
+  table.dt:not(.certs) tr{padding:10px 12px;border-bottom:1px solid var(--line)}
+  table.dt:not(.certs) tr:last-child{border-bottom:0}
+  table.dt:not(.certs) td{padding:2px 0;border:0;white-space:normal;overflow-wrap:anywhere}
+  table.dt:not(.certs) td:first-child{font-weight:600;color:var(--fg)}
+  table.dt:not(.certs) td:empty{display:none}
+  table.dt:not(.certs) tbody tr:hover td{background:none}
+}
+.show-m{display:none}
+@media (max-width:719px){
+  /* header buttons become icon-only so the title keeps its room */
+  .mhead .acts .bl{display:none}
+  .mhead .acts .pbtn.sm,.mhead .acts .sbtn.sm{padding-left:8px;padding-right:8px;gap:0}
+  .show-m{display:flex}
+  .zoomlink{align-items:center;justify-content:center;gap:6px;margin:12px auto 0;color:var(--link,var(--brand));font-weight:600;text-decoration:none}
+}

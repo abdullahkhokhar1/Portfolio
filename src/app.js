@@ -95,7 +95,8 @@ function go(app,item,tab,o={}){
   st={app:A.id,item,tab:tab||null};
   if(o.push!==false){ hist=hist.slice(0,hi+1); hist.push({...st}); hi=hist.length-1; }
   const h='#'+A.id+(item&&item!==A.def?'-'+item:''); if(location.hash!==h){ try{ history.replaceState(null,'',h); }catch(e){ location.hash=h; } }
-  if(isMobile()&&o.detail!==false) $('#work').classList.toggle('detail',!!o.detail);
+  /* phones: entering a section shows its list; only picking an item opens it */
+  if(isMobile()&&o.detail!==undefined) $('#work').classList.toggle('detail',!!o.detail);
   render(); updateNav();
 }
 function updateNav(){ $('#navBack').disabled=hi<=0; $('#navFwd').disabled=hi>=hist.length-1; }
@@ -151,7 +152,7 @@ const STARTERS=['What do you do right now?','What data work have you done?','Wha
 CHAT.log=[
   {from:'me',t:CHAT.t0,html:`<p>Hi, I'm Abdullah. Welcome to my portfolio.</p>`},
   {from:'me',t:CHAT.t0,html:`<p>I'm an <b>Associate Software Engineer at NETSOL Technologies</b>, on the QA Automation team. Most of my work sits where automation meets data: test frameworks, backend validation and data verification.</p>`},
-  {from:'me',t:CHAT.t0,html:`<p>Everything about my work is in the sections on the left. Or ask me something here:</p>`,chips:STARTERS},
+  {from:'me',t:CHAT.t0,html:`<p>Everything about my work is organized into the sections of this portfolio. Or ask me something here:</p>`,chips:STARTERS},
 ];
 function lastPreview(){ const m=CHAT.log[CHAT.log.length-1]; const t=m.html.replace(/<[^>]+>/g,''); return (m.from==='you'?'You: ':'')+t.slice(0,80); }
 function msgHTML(m,prev){
@@ -205,7 +206,7 @@ function ask(q){
 }
 function guideView(){
   const tips=[
-    ['Getting around','Use the sections on the left. Each one opens a list, and the list opens the details here, just like a chat or a channel.'],
+    ['Getting around','Pick any section. Each one opens a list, and the list opens the details, just like a chat or a channel.'],
     ['Search','Press <kbd class="k">Ctrl</kbd> + <kbd class="k">E</kbd> (or click Search at the top) to find a skill, a project or a role anywhere in the portfolio.'],
     ['Shortcuts','<kbd class="k">Ctrl</kbd> + <kbd class="k">1</kbd>…<kbd class="k">0</kbd> switch sections, <kbd class="k">Alt</kbd> + <kbd class="k">←</kbd>/<kbd class="k">→</kbd> go back and forward, and <kbd class="k">Ctrl</kbd> + <kbd class="k">.</kbd> lists every shortcut.'],
     ['Theme','Light and dark themes are under ··· at the top right.'] ];
@@ -350,10 +351,10 @@ function skillsView(id){
 /* ================= resume ================= */
 function resumeView(id){
   const pdf=CONFIG.resumePdf;
-  const acts=`${pdf?`<a class="pbtn sm" href="${pdf}" download style="text-decoration:none">${ic('arrow_download_20_regular','ic16')}Download PDF</a><a class="sbtn sm hide-m" href="${pdf}" target="_blank" rel="noopener" style="text-decoration:none">${ic('open_20_regular','ic16')}Open</a>`:''}<button class="sbtn sm" type="button" data-copytext="${esc(RESUME_TEXT)}" data-okmsg="Resume text copied">${ic('copy_20_regular','ic16')}Copy text</button>`;
+  const acts=`${pdf?`<a class="pbtn sm" href="${pdf}" download style="text-decoration:none" aria-label="Download PDF">${ic('arrow_download_20_regular','ic16')}<span class="bl">Download PDF</span></a><a class="sbtn sm hide-m" href="${pdf}" target="_blank" rel="noopener" style="text-decoration:none">${ic('open_20_regular','ic16')}Open</a>`:''}<button class="sbtn sm" type="button" data-copytext="${esc(RESUME_TEXT)}" data-okmsg="Resume text copied" aria-label="Copy text">${ic('copy_20_regular','ic16')}<span class="bl">Copy text</span></button>`;
   if(id==='text') return {title:'Plain-text version',sub:'Resume',av:avatar('app',32,{icon:'text_bullet_list_20_regular'}),actions:acts,body:()=>`<div class="page"><div class="box plain" tabindex="0" aria-label="Resume as plain text">${esc(RESUME_TEXT)}</div></div>`};
   return {title:'Abdullah-Farhat-Khokhar-Resume',sub:'PDF · 1 page',av:avatar('app',32,{icon:'document_24_regular'}),actions:acts,
-    body:()=>`<div class="docview"><figure class="resdoc"><img src="${CONFIG.resumeImg}" width="1530" height="1980" alt="Resume of ${ME.fullName}, page 1. The plain-text version has the same content."></figure></div>`};
+    body:()=>`<div class="docview"><figure class="resdoc"><img src="${CONFIG.resumeImg}" width="1530" height="1980" alt="Resume of ${ME.fullName}, page 1. The plain-text version has the same content."></figure><a class="show-m zoomlink" href="${CONFIG.resumeImg}" target="_blank" rel="noopener">${ic('open_20_regular','ic16')}Open full size to zoom</a></div>`};
 }
 
 /* ================= contact ================= */
@@ -484,7 +485,7 @@ document.addEventListener('click',e=>{
   const lg=t.closest('[data-group]'); if(lg){ const k=lg.dataset.group; collapsed.has(k)?collapsed.delete(k):collapsed.add(k); renderList(); return; }
   const tb=t.closest('[data-tab]'); if(tb){ st.tab=tb.dataset.tab; if(hist[hi]) hist[hi].tab=st.tab; renderMain(); return; }
   const tg=t.closest('[data-tab-go]'); if(tg){ st.tab=tg.dataset.tabGo; renderMain(); return; }
-  const g=t.closest('[data-go]'); if(g){ closePops(); const [a,i,tab]=g.dataset.go.split(','); go(a,i||null,tab||null,{detail:true}); return; }
+  const g=t.closest('[data-go]'); if(g){ closePops(); const [a,i,tab]=g.dataset.go.split(','); go(a,i||null,tab||null,{detail:!!i}); return; }
   const ak=t.closest('[data-ask]'); if(ak){ ask(ak.dataset.ask); return; }
   const mt=t.closest('[data-mailto]'); if(mt){ openMail(mt.dataset.mailto); return; }
   const cp=t.closest('[data-copy]'); if(cp){ copyText(cp.dataset.copy,'Email address copied'); return; }

@@ -168,7 +168,7 @@ const FAQ = [
   { k:['education','degree','university','study','fccu','forman','college','cgpa'], q:'Where did you study?',
     a:`BS Computer Science at <b>Forman Christian College (A Chartered University)</b>, 2021–2025. I was also a Teaching Assistant there in my final semester.`, go:['about','education'] },
   { k:['resume','cv','resume','download'], q:'Can I get your resume?',
-    a:`Yes, open the <b>Resume</b> section on the left. It shows my full resume.`, go:['resume','doc'] },
+    a:`Yes, open the <b>Resume</b> section. It shows my full resume.`, go:['resume','doc'] },
   { k:['contact','email','mail','reach','hire','hiring','interview','call','meet'], q:'How do I reach you?',
     a:`Email me at <b>${'abdullahfarhat1492@gmail.com'}</b>, or use the <b>Contact</b> section to write a message right here. I'm also on LinkedIn.`, go:['contact','new'] },
   { k:['where','location','based','lahore','pakistan','remote','relocate'], q:'Where are you based?',
