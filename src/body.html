@@ -1,0 +1,79 @@
+<div class="app" id="app">
+  <header class="titlebar">
+    <div class="brandmark"><button class="logobtn" type="button" id="logoBtn" data-tip="Abdullah Farhat Khokhar | Workspace" aria-label="Go to the start"><svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Abdullah Farhat Khokhar Workspace"><circle cx="36.5" cy="11.5" r="6" fill="#7B83EB"/><path d="M27 20h13a6 6 0 0 1 6 6v6.5a9.5 9.5 0 0 1-19 0z" fill="#7B83EB"/><rect x="2" y="13" width="28" height="28" rx="5" fill="#5059C9"/><rect x="9" y="28" width="3.8" height="7" rx="1.9" fill="#fff"/><rect x="14.1" y="24" width="3.8" height="11" rx="1.9" fill="#fff"/><rect x="19.2" y="19" width="3.8" height="16" rx="1.9" fill="#fff"/></svg></button></div>
+    <div class="navbtns">
+      <button class="ibtn" id="navBack" type="button" data-tip="Back" aria-label="Back" disabled><svg class="ic"><use href="#i-arrow_left_20_regular"/></svg></button>
+      <button class="ibtn" id="navFwd" type="button" data-tip="Forward" aria-label="Forward" disabled><svg class="ic"><use href="#i-arrow_right_20_regular"/></svg></button>
+    </div>
+    <div class="searchwrap" role="search">
+      <div class="search">
+        <svg class="ic"><use href="#i-search_20_regular"/></svg>
+        <label class="sr" for="q">Search the workspace</label>
+        <input id="q" type="text" placeholder="Search" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="sres" aria-autocomplete="list">
+        <button class="ibtn clear" id="qClear" type="button" aria-label="Clear search" hidden><svg class="ic ic16"><use href="#i-dismiss_20_regular"/></svg></button>
+        <kbd>Ctrl+E</kbd>
+      </div>
+      <div class="pop sres" id="sres" role="listbox" aria-label="Search results" hidden></div>
+    </div>
+    <div class="tright">
+      <button class="ibtn" id="moreBtn" type="button" data-tip="Settings and more" aria-label="Settings and more" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-more_horizontal_20_regular"/></svg></button>
+      <button class="avbtn" id="meBtn" type="button" aria-label="Abdullah Farhat Khokhar, Available. Open profile card" aria-haspopup="dialog"></button>
+    </div>
+  </header>
+
+  <nav class="rail" id="rail" aria-label="Sections"></nav>
+
+  <div class="work" id="work">
+    <section class="list" id="list" aria-labelledby="listTitle">
+      <div class="lhead">
+        <h1 id="listTitle">Chat</h1>
+        <button class="ibtn" id="listFilterBtn" type="button" data-tip="Filter" aria-label="Filter this list" aria-pressed="false"><svg class="ic"><use href="#i-filter_20_regular"/></svg></button>
+        <button class="ibtn" id="listNewBtn" type="button" data-tip="New message to Abdullah" aria-label="New message to Abdullah"><svg class="ic"><use href="#i-compose_20_regular"/></svg></button>
+      </div>
+      <div class="lfilter" id="lfilter"><label class="sr" for="lfq">Filter by name</label><input id="lfq" type="text" placeholder="Filter by name" autocomplete="off"></div>
+      <div class="lscroll" id="lscroll" role="listbox" aria-labelledby="listTitle"></div>
+    </section>
+
+    <section class="main" id="main">
+      <div class="conv">
+        <header class="mhead" id="mhead"></header>
+        <div class="mbody" id="mbody" tabindex="-1"></div>
+        <div class="composer" id="composer" hidden>
+          <form class="box2" id="cform">
+            <label class="sr" for="cmsg">Type a message</label>
+            <textarea id="cmsg" rows="1" placeholder="Type a message"></textarea>
+            <button class="ibtn" type="button" id="cEmoji" data-tip="Suggested questions" aria-label="Show suggested questions"><svg class="ic"><use href="#i-sparkle_20_regular"/></svg></button>
+            <button class="ibtn sendbtn" type="submit" id="cSend" data-tip="Send (Enter)" aria-label="Send" disabled><svg class="ic"><use href="#i-send_20_filled"/></svg></button>
+          </form>
+          <div class="hint" id="chint">Answers are written by Abdullah ahead of time and matched to your question.</div>
+        </div>
+      </div>
+      <aside class="details" id="details" hidden aria-labelledby="dTitle">
+        <div class="dhead"><h2 id="dTitle">Details</h2><button class="ibtn" id="dClose" type="button" aria-label="Close details" data-tip="Close"><svg class="ic"><use href="#i-dismiss_20_regular"/></svg></button></div>
+        <div class="dbody" id="dbody"></div>
+      </aside>
+    </section>
+  </div>
+</div>
+
+<div class="pop menu" id="moreMenu" role="menu" aria-label="Settings and more" hidden>
+  <div class="mlabel">Theme</div>
+  <button class="mi" role="menuitemradio" data-theme-set="system" type="button"><svg class="ic"><use href="#i-status_20_regular"/></svg>Match system<svg class="ic chk"><use href="#i-checkmark_20_regular"/></svg></button>
+  <button class="mi" role="menuitemradio" data-theme-set="light" type="button"><svg class="ic"><use href="#i-weather_moon_20_regular"/></svg>Light<svg class="ic chk"><use href="#i-checkmark_20_regular"/></svg></button>
+  <button class="mi" role="menuitemradio" data-theme-set="dark" type="button"><svg class="ic"><use href="#i-weather_moon_20_regular"/></svg>Dark<svg class="ic chk"><use href="#i-checkmark_20_regular"/></svg></button>
+  <div class="msep"></div>
+  <button class="mi" role="menuitem" type="button" id="miShortcuts"><svg class="ic"><use href="#i-keyboard_20_regular"/></svg>Keyboard shortcuts</button>
+  <button class="mi" role="menuitem" type="button" id="miCopyLink"><svg class="ic"><use href="#i-link_20_regular"/></svg>Copy link to this view</button>
+</div>
+
+<div class="pop card" id="pcard" role="dialog" aria-label="Contact card" hidden></div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <header><h2 id="dlgTitle"></h2><button class="ibtn" id="dlgX" type="button" aria-label="Close"><svg class="ic"><use href="#i-dismiss_20_regular"/></svg></button></header>
+    <div class="dc" id="dlgBody"></div>
+    <footer><button class="pbtn" id="dlgOk" type="button">Close</button></footer>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" hidden><svg class="ic"><use href="#i-checkmark_circle_20_filled"/></svg><span id="toastTxt"></span></div>
