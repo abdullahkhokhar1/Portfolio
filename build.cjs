@@ -1,8 +1,8 @@
 // Assemble the single-file site: index.html (full page for GitHub Pages) and artifact.html (body fragment for preview).
 const fs=require('fs'), r=f=>fs.readFileSync(__dirname+'/src/'+f,'utf8');
-const head=`<title>Abdullah Farhat Khokhar | Workspace</title>
+const head=`<title>Abdullah Farhat Khokhar | Portfolio</title>
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
-<meta name="description" content="Abdullah Farhat Khokhar: Software Engineer, QA Automation, Data & Analytics. Portfolio workspace.">
+<meta name="description" content="Abdullah Farhat Khokhar: Software Engineer, QA Automation, Data & Analytics. Portfolio.">
 <style>
 ${r('styles.css')}
 </style>`;

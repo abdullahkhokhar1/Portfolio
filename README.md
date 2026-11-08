@@ -1,4 +1,4 @@
-# Abdullah Farhat Khokhar | Workspace
+# Abdullah Farhat Khokhar | Portfolio
 
 My portfolio, laid out like a desktop collaboration app: chats, activity, projects, experience and a contact form, all in one static page.
 

@@ -30,7 +30,7 @@ let toastT; function toast(t){ $('#toastTxt').textContent=t; $('#toast').hidden=
 /* ================= apps (rail) ================= */
 const READ=new Set(store.get('ws-read',[]));
 const ACTIVITY=[
-  {id:'welcome',name:'New message from Abdullah',pv:'Hi, I\'m Abdullah. Welcome to my workspace.',tm:'Now',to:['chat','abdullah'],av:'me'},
+  {id:'welcome',name:'New message from Abdullah',pv:'Hi, I\'m Abdullah. Welcome to my portfolio.',tm:'Now',to:['chat','abdullah'],av:'me'},
   {id:'netsol',name:'Started a new role',pv:'Associate Software Engineer at NETSOL Technologies',tm:'Oct 2025',to:['experience','netsol'],av:'org:netsol'},
   {id:'data',name:'Data Analytics',pv:'How data runs through my work, from QA to models',tm:'2025',to:['analytics','overview'],av:'app:data_bar_vertical_24_regular'},
   {id:'auto',name:'Automation Lab',pv:'From C# UI suites to a Python BDD framework',tm:'2025',to:['automation','architecture'],av:'app:bot_24_regular'},
@@ -47,7 +47,7 @@ const APPS=[
     view:id=>{ const a=ACTIVITY.find(x=>x.id===id)||ACTIVITY[0]; markRead(a.id); return appById(a.to[0]).view(a.to[1],true); } },
   {id:'chat',label:'Chat',icon:'chat',title:'Chat',def:'abdullah',
     groups:()=>[{label:'Pinned',items:[{id:'abdullah',name:ME.name,pv:lastPreview(),tm:fmtTime(CHAT.t0),av:avatar('me',32,{ring:'var(--pane)'})}]},
-                {label:'Recent',items:[{id:'guide',name:'Workspace guide',pv:'How to get around this workspace',tm:'Pinned',av:avatar('app',32,{icon:'apps_20_regular'})}]}],
+                {label:'Recent',items:[{id:'guide',name:'Portfolio guide',pv:'How to get around this portfolio',tm:'Pinned',av:avatar('app',32,{icon:'apps_20_regular'})}]}],
     view:id=>id==='guide'?guideView():chatView() },
   {id:'about',label:'About Me',icon:'person',title:'About Me',def:'intro',
     groups:()=>[{label:'About Me',items:[
@@ -143,13 +143,13 @@ function renderMain(){
   if(hasD){ const dd=v.details(); $('#dTitle').textContent=dd.title||'Details'; $('#dbody').innerHTML=dd.html; }
   v.mount&&v.mount(body,tab);
 }
-function render(){ renderRail(); renderList(); renderMain(); document.title=`${appById(st.app).label} | Abdullah Farhat Khokhar | Workspace`; }
+function render(){ renderRail(); renderList(); renderMain(); document.title=`${appById(st.app).label} | Abdullah Farhat Khokhar | Portfolio`; }
 
 /* ================= chat ================= */
 const CHAT={t0:new Date(Date.now()-4*60000),log:[]};
 const STARTERS=['What do you do right now?','What data work have you done?','What does your automation work look like?','Can I see your projects?','How do I reach you?'];
 CHAT.log=[
-  {from:'me',t:CHAT.t0,html:`<p>Hi, I'm Abdullah. Welcome to my workspace.</p>`},
+  {from:'me',t:CHAT.t0,html:`<p>Hi, I'm Abdullah. Welcome to my portfolio.</p>`},
   {from:'me',t:CHAT.t0,html:`<p>I'm an <b>Associate Software Engineer at NETSOL Technologies</b>, on the QA Automation team. Most of my work sits where automation meets data: test frameworks, backend validation and data verification.</p>`},
   {from:'me',t:CHAT.t0,html:`<p>Everything about my work is in the sections on the left. Or ask me something here:</p>`,chips:STARTERS},
 ];
@@ -206,11 +206,11 @@ function ask(q){
 function guideView(){
   const tips=[
     ['Getting around','Use the sections on the left. Each one opens a list, and the list opens the details here, just like a chat or a channel.'],
-    ['Search','Press <kbd class="k">Ctrl</kbd> + <kbd class="k">E</kbd> (or click Search at the top) to find a skill, a project or a role anywhere in the workspace.'],
+    ['Search','Press <kbd class="k">Ctrl</kbd> + <kbd class="k">E</kbd> (or click Search at the top) to find a skill, a project or a role anywhere in the portfolio.'],
     ['Shortcuts','<kbd class="k">Ctrl</kbd> + <kbd class="k">1</kbd>…<kbd class="k">0</kbd> switch sections, <kbd class="k">Alt</kbd> + <kbd class="k">←</kbd>/<kbd class="k">→</kbd> go back and forward, and <kbd class="k">Ctrl</kbd> + <kbd class="k">.</kbd> lists every shortcut.'],
     ['Theme','Light and dark themes are under ··· at the top right.'] ];
-  return {title:'Workspace guide',sub:'Pinned',av:avatar('app',32,{icon:'apps_20_regular'}),
-    body:()=>`<div class="feed"><div class="day">Pinned</div>${tips.map((t,i)=>`<div class="msg ${i?'cont':''}">${avatar('app',32,{icon:'apps_20_regular'})}<div class="meta"><b>Workspace guide</b></div><div class="bub"><h3>${t[0]}</h3><p>${t[1]}</p></div></div>`).join('')}</div>` };
+  return {title:'Portfolio guide',sub:'Pinned',av:avatar('app',32,{icon:'apps_20_regular'}),
+    body:()=>`<div class="feed"><div class="day">Pinned</div>${tips.map((t,i)=>`<div class="msg ${i?'cont':''}">${avatar('app',32,{icon:'apps_20_regular'})}<div class="meta"><b>Portfolio guide</b></div><div class="bub"><h3>${t[0]}</h3><p>${t[1]}</p></div></div>`).join('')}</div>` };
 }
 
 /* ================= profile ================= */
@@ -371,7 +371,7 @@ function contactView(id){
         <div class="grid2"><div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" value="${esc(DRAFT.name)}" placeholder="Jane Doe"><span class="err" id="e-name"></span></div>
         <div class="field"><label for="f-email">Your email</label><input id="f-email" name="email" type="email" autocomplete="email" value="${esc(DRAFT.email)}" placeholder="you@company.com"><span class="err" id="e-email"></span></div></div>
         <div class="field"><label for="f-subject">Subject</label><input id="f-subject" name="subject" value="${esc(DRAFT.subject)}" placeholder="Let's talk"></div>
-        <div class="field"><label for="f-message">Message</label><textarea id="f-message" name="message" placeholder="Hi Abdullah, I saw your workspace…">${esc(DRAFT.message||(CHAT.pendingQ?`Hi Abdullah, a question from your workspace chat: ${CHAT.pendingQ}`:''))}</textarea><span class="err" id="e-message"></span></div>
+        <div class="field"><label for="f-message">Message</label><textarea id="f-message" name="message" placeholder="Hi Abdullah, I saw your portfolio…">${esc(DRAFT.message||(CHAT.pendingQ?`Hi Abdullah, a question from your portfolio chat: ${CHAT.pendingQ}`:''))}</textarea><span class="err" id="e-message"></span></div>
         <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
         <div id="f-status" role="status"></div>
       </div>
@@ -404,14 +404,14 @@ function mountMail(b){
     const out=$('#f-status',b);
     if(!ok){ out.innerHTML=''; f.querySelector('[aria-invalid="true"]').focus(); return; }
     if(!CONFIG.web3formsKey){
-      const body=encodeURIComponent(`${v('message')}\n\n— ${v('name')} (${v('email')})`), subj=encodeURIComponent(v('subject')||'Message from your workspace');
+      const body=encodeURIComponent(`${v('message')}\n\n— ${v('name')} (${v('email')})`), subj=encodeURIComponent(v('subject')||'Message from your portfolio');
       out.innerHTML=`<div class="status info">${ic('info_20_regular')}<div>Your message has <b>not</b> been sent. Direct sending isn't switched on in this preview yet. You can <button class="linkbtn" type="button" data-mailto="mailto:${ME.email}?subject=${subj}&amp;body=${body}">open it in your mail app</button> or <button class="tbtn" type="button" data-copytext="${esc(v('message')+'\n\n— '+v('name')+' ('+v('email')+')')}" data-okmsg="Message copied">copy the message</button> and send it to ${ME.email}.</div></div>`;
       return;
     }
     const btn=$('#f-send',b); btn.disabled=true; btn.lastChild.textContent='Sending…';
     try{
       const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-        body:JSON.stringify({access_key:CONFIG.web3formsKey,name:v('name'),email:v('email'),subject:v('subject')||'Message from your workspace',message:v('message'),from_name:'Abdullah Farhat Khokhar | Workspace',botcheck:f.elements.botcheck.checked})});
+        body:JSON.stringify({access_key:CONFIG.web3formsKey,name:v('name'),email:v('email'),subject:v('subject')||'Message from your portfolio',message:v('message'),from_name:'Abdullah Farhat Khokhar | Portfolio',botcheck:f.elements.botcheck.checked})});
       const j=await r.json().catch(()=>({}));
       if(r.ok&&j.success){ out.innerHTML=`<div class="status ok">${ic('checkmark_circle_20_filled')}<div>Sent. Abdullah will reply to ${esc(v('email'))}.</div></div>`; ['subject','message'].forEach(k=>{DRAFT[k]='';f.elements[k].value='';}); store.set('ws-draft',DRAFT); CHAT.pendingQ=null; }
       else throw new Error(j.message||('HTTP '+r.status));
