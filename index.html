@@ -1295,7 +1295,14 @@ function mountMail(b){
     const btn=$('#f-send',b); btn.disabled=true; btn.lastChild.textContent='Sending…';
     try{
       const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-        body:JSON.stringify({access_key:CONFIG.web3formsKey,name:v('name'),email:v('email'),subject:v('subject')||'Message from your workspace',message:v('message'),from_name:'Abdullah Farhat Khokhar | Workspace',botcheck:f.elements.botcheck.checked})});
+        body:JSON.stringify(Object.assign({access_key:CONFIG.web3formsKey,
+          subject:`Portfolio message from ${v('name')}${v('subject')?': '+v('subject'):''}`,
+          from_name:'Portfolio contact form', replyto:v('email'), botcheck:f.elements.botcheck.checked,
+          'From':v('name'), 'Reply to':v('email')},
+          v('subject')?{'Topic':v('subject')}:{},
+          {'Message':v('message'),
+           'Sent from':location.origin+location.pathname,
+           'Sent at':new Date().toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZoneName:'short'})}))});
       const j=await r.json().catch(()=>({}));
       if(r.ok&&j.success){ out.innerHTML=`<div class="status ok">${ic('checkmark_circle_20_filled')}<div>Sent. Abdullah will reply to ${esc(v('email'))}.</div></div>`; ['subject','message'].forEach(k=>{DRAFT[k]='';f.elements[k].value='';}); store.set('ws-draft',DRAFT); CHAT.pendingQ=null; }
       else throw new Error(j.message||('HTTP '+r.status));
