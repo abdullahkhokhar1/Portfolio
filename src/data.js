@@ -4,7 +4,7 @@ const CONFIG = {
   portrait: 'assets/portrait-about.webp', // portrait shown at the top of About Me
   resumePdf: 'assets/Abdullah-Farhat-Khokhar-Resume.pdf',
   resumeImg: 'assets/resume-page-1.webp',
-  web3formsKey: null,          // Web3Forms access key (public, domain-restricted); null = sending disabled
+  web3formsKey: '6a4985c4-0229-4ccc-9372-b16203c2b6f4',          // Web3Forms access key (public, domain-restricted); null = sending disabled
 };
 /* LinkedIn videos shown in Projects, Teams-style. Add one entry per post:
    { project:'caretrax', title:'…', posted:'Mar 2025', linkedin:'https://www.linkedin.com/posts/abdullahkhokhar1_…-activity-7123456789012345678-AbCd' }
