@@ -410,9 +410,17 @@ function mountMail(b){
     }
     const btn=$('#f-send',b); btn.disabled=true; btn.lastChild.textContent='Sending…';
     try{
-      const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-        body:JSON.stringify({access_key:CONFIG.web3formsKey,name:v('name'),email:v('email'),subject:v('subject')||'Message from your workspace',message:v('message'),from_name:'Abdullah Farhat Khokhar | Workspace',botcheck:f.elements.botcheck.checked})});
-      const j=await r.json().catch(()=>({}));
+      const post=o=>fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+        body:JSON.stringify(Object.assign({access_key:CONFIG.web3formsKey,botcheck:f.elements.botcheck.checked},o))});
+      /* Richer email first; if Web3Forms rejects any of its fields, resend in the plain format that is known to work */
+      const rich=Object.assign({subject:`Portfolio message from ${v('name')}${v('subject')?' · '+v('subject'):''}`,from_name:'Portfolio contact form',name:v('name'),email:v('email')},
+        v('subject')?{Topic:v('subject')}:{},
+        {message:v('message'),Page:location.origin+location.pathname,'Sent at':new Date().toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZoneName:'short'})});
+      let r=await post(rich), j=await r.json().catch(()=>({}));
+      if(!(r.ok&&j.success)&&r.status===400&&!/honeypot|spam/i.test(j.message||'')){
+        r=await post({name:v('name'),email:v('email'),subject:v('subject')||'Message from your workspace',message:v('message'),from_name:'Abdullah Farhat Khokhar | Workspace'});
+        j=await r.json().catch(()=>({}));
+      }
       if(r.ok&&j.success){ out.innerHTML=`<div class="status ok">${ic('checkmark_circle_20_filled')}<div>Sent. Abdullah will reply to ${esc(v('email'))}.</div></div>`; ['subject','message'].forEach(k=>{DRAFT[k]='';f.elements[k].value='';}); store.set('ws-draft',DRAFT); CHAT.pendingQ=null; }
       else throw new Error(j.message||('HTTP '+r.status));
     }catch(err){ out.innerHTML=`<div class="status err">${ic('dismiss_circle_20_filled')}<div>The message didn't send (${esc(err.message||'network error')}). Your draft is saved. Try again, or email ${ME.email} directly.</div></div>`; }
