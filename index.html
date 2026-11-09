@@ -956,9 +956,9 @@ let toastT; function toast(t){ $('#toastTxt').textContent=t; $('#toast').hidden=
 const READ=new Set(store.get('ws-read',[]));
 const ACTIVITY=[
   {id:'welcome',name:'New message from Abdullah',pv:'Hi, I\'m Abdullah. Welcome to my portfolio.',tm:'Now',to:['chat','abdullah'],av:'me'},
-  {id:'netsol',name:'Started a new role',pv:'Associate Software Engineer at NETSOL Technologies',tm:'Oct 2025',to:['experience','netsol'],av:'org:netsol'},
-  {id:'data',name:'Data Analytics',pv:'How data runs through my work, from QA to models',tm:'2025',to:['analytics','overview'],av:'app:data_bar_vertical_24_regular'},
-  {id:'auto',name:'Automation Lab',pv:'From C# UI suites to a Python BDD framework',tm:'2025',to:['automation','architecture'],av:'app:bot_24_regular'},
+  {id:'netsol',name:'Started a new role',pv:'Associate Software Engineer at NETSOL Technologies',tm:'Oct 2025',to:['experience','netsol'],av:'org:netsol',read:true},
+  {id:'data',name:'Data Analytics',pv:'How data runs through my work, from QA to models',tm:'2025',to:['analytics','overview'],av:'app:data_bar_vertical_24_regular',read:true},
+  {id:'auto',name:'Automation Lab',pv:'From C# UI suites to a Python BDD framework',tm:'2025',to:['automation','architecture'],av:'app:bot_24_regular',read:true},
   {id:'caretrax',name:'Project: CareTrax',pv:'IoT insulin-drip monitor: ESP32, Firebase, Android',tm:'2025',to:['projects','caretrax'],av:'app:folder_24_regular',read:true},
   {id:'grad',name:'Graduated',pv:'BS Computer Science, Forman Christian College',tm:'2025',to:['about','education'],av:'org:fccu-ta',read:true},
   {id:'resume',name:'Abdullah shared a file with you',pv:'Abdullah-Farhat-Khokhar-Resume',tm:'2026',to:['resume','doc'],av:'app:document_24_regular',read:true},
@@ -969,7 +969,7 @@ const avFrom=(spec,size)=>{ if(spec==='me') return avatar('me',size,{ring:'var(-
 const APPS=[
   {id:'activity',label:'Activity',icon:'alert',title:'Activity',def:'welcome',
     groups:()=>[{label:'Feed',items:ACTIVITY.map(a=>({id:a.id,name:a.name,pv:a.pv,tm:a.tm,av:avFrom(a.av,32),unread:!a.read&&!READ.has(a.id)}))}],
-    view:id=>{ const a=ACTIVITY.find(x=>x.id===id)||ACTIVITY[0]; markRead(a.id); return appById(a.to[0]).view(a.to[1],true); } },
+    view:id=>{ const a=ACTIVITY.find(x=>x.id===id)||ACTIVITY[0]; return appById(a.to[0]).view(a.to[1],true); } },
   {id:'chat',label:'Chat',icon:'chat',title:'Chat',def:'abdullah',
     groups:()=>[{label:'Pinned',items:[{id:'abdullah',name:ME.name,pv:lastPreview(),tm:fmtTime(CHAT.t0),av:avatar('me',32,{ring:'var(--pane)'})}]},
                 {label:'Recent',items:[{id:'guide',name:'Portfolio guide',pv:'How to get around this portfolio',tm:'Pinned',av:avatar('app',32,{icon:'apps_20_regular'})}]}],
@@ -1016,13 +1016,17 @@ function markRead(id){ if(!READ.has(id)){ READ.add(id); store.set('ws-read',[...
 let st={app:'chat',item:'abdullah',tab:null}, hist=[], hi=-1, detailsOpen=store.get('ws-details',null);
 function parseHash(){ const h=decodeURIComponent(location.hash.slice(1)); if(!h) return null; const i=h.indexOf('-'); const app=i<0?h:h.slice(0,i), item=i<0?null:h.slice(i+1); return APPS.some(a=>a.id===app)?{app,item}:null; }
 function go(app,item,tab,o={}){
-  const A=appById(app); item=item||A.def;
+  const A=appById(app), picked=!!item; item=item||A.def;
   st={app:A.id,item,tab:tab||null};
   if(o.push!==false){ hist=hist.slice(0,hi+1); hist.push({...st}); hi=hist.length-1; }
   const h='#'+A.id+(item&&item!==A.def?'-'+item:''); if(location.hash!==h){ try{ history.replaceState(null,'',h); }catch(e){ location.hash=h; } }
   /* phones: entering a section shows its list; only picking an item opens it */
   if(isMobile()&&o.detail!==undefined) $('#work').classList.toggle('detail',!!o.detail);
   render(); updateNav();
+  if(!o.init&&(!isMobile()||$('#work').classList.contains('detail'))){
+    const a=st.app==='activity'&&picked?ACTIVITY.find(x=>x.id===st.item):null;
+    if((st.app==='chat'&&st.item==='abdullah')||(a&&a.to[0]==='chat'&&a.to[1]==='abdullah')) markRead('welcome');
+  }
 }
 function updateNav(){ $('#navBack').disabled=hi<=0; $('#navFwd').disabled=hi>=hist.length-1; }
 function navStep(d){ const n=hi+d; if(n<0||n>=hist.length) return; hi=n; const s=hist[hi]; go(s.app,s.item,s.tab,{push:false,detail:true}); }
@@ -1478,7 +1482,7 @@ addEventListener('resize',()=>{ if(!isMobile()) $('#work').classList.remove('det
 (function boot(){
   const t=store.get('ws-theme','system'); if(t!=='system') document.documentElement.setAttribute('data-theme',t);
   $('#meBtn').innerHTML=avatar('me',32,{ring:'var(--chrome)',label:true});
-  const p=parseHash(); go(p?p.app:'chat',p?p.item:null,null,{detail:!!(p&&p.item)});
+  const p=parseHash(); go(p?p.app:'chat',p?p.item:null,null,{detail:!!(p&&p.item),init:true});
   setInterval(()=>{ if(!$('#pcard').hidden) { /* keep local time fresh */ const r=$('#pcard .cinfo .r:nth-child(2) span'); if(r) r.textContent=`${localTime()} local time · ${ME.location}`; } },30000);
 })();
 
