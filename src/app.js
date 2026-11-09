@@ -6,6 +6,8 @@ const todo=t=>`<span class="todo" title="Placeholder: Abdullah will add this">${
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const fmtTime=d=>d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
 const isMobile=()=>matchMedia('(max-width:719px)').matches;
+/* phone bottom bar: the first sections in desktop order; the rest go under More, in the same order */
+const MOBILE_BAR=['activity','chat','about','experience'];
 
 function avatar(kind='me',size=32,o={}){
   const s=`style="--s:${size}px${o.ring?';--ring:'+o.ring:''}"`;
@@ -104,7 +106,7 @@ function navStep(d){ const n=hi+d; if(n<0||n>=hist.length) return; hi=n; const s
 
 /* ================= render ================= */
 function renderRail(){
-  const mobileKeep=['activity','chat','projects','analytics'];
+  const mobileKeep=MOBILE_BAR;
   const n=unreadCount();
   $('#rail').innerHTML=APPS.map((a,i)=>{
     const ri=a.icon+'_24_regular', fi=a.icon+'_24_filled';
@@ -480,7 +482,7 @@ function hideTip(){ clearTimeout(tipT); tip.classList.remove('on'); tipEl=null; 
 document.addEventListener('click',e=>{
   const t=e.target;
   const ri=t.closest('.ritem[data-app]'); if(ri){ hideTip(); $('#lfq').value=''; go(ri.dataset.app,null,null,{detail:false}); return; }
-  if(t.closest('#railMore')){ const b=t.closest('#railMore'); openMenu(b,APPS.filter(a=>!['activity','chat','projects','analytics'].includes(a.id)).map(a=>`<button class="mi" role="menuitem" type="button" data-go="${a.id}">${ic(a.icon+'_24_regular')}${a.label}</button>`).join('')); return; }
+  if(t.closest('#railMore')){ const b=t.closest('#railMore'); openMenu(b,APPS.filter(a=>!MOBILE_BAR.includes(a.id)).map(a=>`<button class="mi" role="menuitem" type="button" data-go="${a.id}">${ic(a.icon+'_24_regular')}${a.label}</button>`).join('')); return; }
   const li=t.closest('.litem[data-item]'); if(li){ go(st.app,li.dataset.item,null,{detail:true}); return; }
   const lg=t.closest('[data-group]'); if(lg){ const k=lg.dataset.group; collapsed.has(k)?collapsed.delete(k):collapsed.add(k); renderList(); return; }
   const tb=t.closest('[data-tab]'); if(tb){ st.tab=tb.dataset.tab; if(hist[hi]) hist[hi].tab=st.tab; renderMain(); return; }
